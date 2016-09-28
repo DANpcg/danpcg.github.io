@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DANgaming Tools</title>
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/lumen/bootstrap.min.css" rel="stylesheet" integrity="sha384-gv0oNvwnqzF6ULI9TVsSmnULNb3zasNysvWwfT/s4l8k5I+g6oFz9dye0wg3rQ2Q" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+<link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="">DANgaming Tools</a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a id="tab-home" href="#home">Home</a></li>
+				<li><a id="tab-awbot" href="#awbot">Alienware Bot</a></li>
+				<li><a id="tab-twitchcheck" href="#twitchcheck">TwitchCheck</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<div class="tab-content">
+	<div id="home" class="tab-pane active">
+		<div class="jumbotron">
+			<div class="container">
+				<h1>Welcome!</h1>
+				<p>Greetings, dear members of the internet! My name is Dan and I play games. I also develop tools and write poems:<br>Roses are red, violets are blue, this website is under construction.</p>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4">
+					<h2>Alienware Bot</h2>
+					<p>Alienware ModBot documentation and list of commands for the moderators of the <a href="http://www.twitch.tv/alienware" target="_blank">Alienware Twitch channel</a>.</p>
+					<p><a class="btn btn-default" href="#awbot">View details &raquo;</a></p>
+				</div>
+				<div class="col-md-4">
+					<h2>TwitchCheck</h2>
+					<p>A tool that displays some basic information about Twitch accounts and allows to compare two accounts.</p>
+					<p><a class="btn btn-default" href="#twitchcheck">View details &raquo;</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="awbot" class="tab-pane">
+		<div class="container">
+			<h1>Alienware Bot</h1>
+			<blockquote>
+				<p>Respect my authoritah!</p>
+				<footer>AWB0t</footer>
+			</blockquote>
+			<p>Alienware Bot has two functions: prevent raffle commands spam (ModBot) and collect raffle winners (RaffleBot).</p>
+			<h2>ModBot</h2>
+			<p>ModBot times out people who spam the raffle commands (!ticket and commands for keyword raffles). Any raffle command outside of raffles will be deleted to prevent further spam. If a raffle is open, only repeated entries that are valid will be deleted. Invalid !ticket commands (e.g. "!ticket", "!ticket 9001", "!ticket all") and "!ticket 0" will be ignored, so people won't get punished for correcting their typos or leaving the raffle.</p>
+			<p>ModBot has a two level system to punish the raffle commands spam. The system is similar to the cards in a soccer game:</p>
+			<ol>
+				<li>yellow card = 1 second timeout (default)</li>
+				<li>red card = 10 minutes timeout (default)</li>
+			</ol>
+			<p>Further spam will be punished with additional red cards. Whenever a raffle starts or ends, the cards are reset and new offenders are punished with a yellow card.</p>
+			<p>The commands to control ModBot are:</p>
+			<ul>
+				<li><code>!awmodbot</code> &ndash; shows current version and state of ModBot</li>
+				<li><code>!awmodbot on</code> &ndash; enables ModBot</li>
+				<li><code>!awmodbot off</code> &ndash; disables ModBot</li>
+				<li><code>!awmodbot raffle</code> &ndash; shows ModBot's raffle state</li>
+				<li><code>!awmodbot raffle on</code> &ndash; manually sets ModBot's raffle state to ON (time out multiple raffle commands)</li>
+				<li><code>!awmodbot raffle off</code> &ndash; manually sets ModBot's raffle state to OFF (time out all raffle commands)</li>
+				<li><code>!yellowcard</code> &ndash; shows timeout duration of yellow cards</li>
+				<li><code>!yellowcard &lt;time&gt;</code> &ndash; sets timeout duration of yellow cards to <code>&lt;time&gt;</code> seconds</li>
+				<li><code>!redcard</code> &ndash; shows timeout duration of red cards</li>
+				<li><code>!redcard &lt;time&gt;</code> &ndash; sets timeout duration of red cards to <code>&lt;time&gt;</code> seconds</li>
+				<li><code>!checkcard &lt;account&gt;</code> &ndash; shows how many cards <code>&lt;account&gt;</code> has</li>
+				<li><code>!resetcards</code> &ndash; manually resets cards</li>
+			</ul>
+			<h2>RaffleBot</h2>
+			<p>Coming soon™</p>
+		</div>
+	</div>
+	
+	<div id="twitchcheck" class="tab-pane">
+		<div class="container">
+			<h1>TwitchCheck</h1>
+			<blockquote>
+				<p>Data analytics complete. Yarp... Suspicious activity.</p>
+				<footer><a href="https://i.imgflip.com/14i8zp.jpg" target="_blank">Epicorg</a></footer>
+			</blockquote>
+			<form id="form-twitchcheck">
+				<div class="row">
+					<div class="col-md-4 form-group">
+						<label for="twitchcheck-name">Account</label>
+						<input id="twitchcheck-name" class="form-control" required placeholder="Twitch name">
+					</div>
+					<div class="col-md-4 form-group">
+						<label for="twitchcheck-follows">Follows channel (optional)</label>
+						<input id="twitchcheck-follows" class="form-control" value="alienware" placeholder="Twitch channel">
+					</div>
+					<div class="col-md-4 form-group">
+						<label for="twitchcheck-compare">Compare with (optional)</label>
+						<input id="twitchcheck-compare" class="form-control" placeholder="Twitch name">
+					</div>
+				</div>
+				<button type="submit" id="twitchcheck-check" class="btn btn-primary" data-loading-text="Loading&hellip;">Check</button>
+			</form>
+			<hr id="twitchcheck-hr" class="hidden">
+			<div class="row">
+				<div class="col-md-6">
+					<div id="twitchcheck-info-user"></div>
+					<div id="twitchcheck-info-follows"></div>
+				</div>
+				<div class="col-md-6">
+					<div id="twitchcheck-info-user2"></div>
+					<div id="twitchcheck-info-follows2"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script id="tpl-twitchcheckInfoUser" type="text/template">
+	<p><a class="twitchcheck-account" href="https://www.twitch.tv/{{name}}/profile" target="_blank" title="Go to profile">
+		{{#if logo}}<img src="{{logo}}" class="twitchcheck-logo">{{/if}}{{display_name}}
+	</a></p>
+	<ul class="list-unstyled">
+		{{#if bio}}<li><b>Bio:</b> {{bio}}</li>{{/if}}</li>
+		<li><b>Created:</b> {{created_at}}</li>
+		<li><b>Last update:</b> {{updated_at}}</li>
+	</ul>
+</script>
+<script id="tpl-twitchcheckInfoFollows" type="text/template">
+	{{#if created_at}}
+	<p><i class="fa fa-check"></i> {{name}} is following {{channel}} since {{created_at}}</p>
+	{{else}}
+	<p><i class="fa fa-times"></i> {{name}} is not following {{channel}}</p>
+	{{/if}}
+</script>
+
+<div class="container">
+	<hr>
+	<footer>
+		<ul class="socialmedia list-inline pull-right">
+			<li><a href="http://twitter.com/DANpcg"><i class="fa fa-twitter"></i>@DANpcg</a></li>
+			<li><a href="http://youtube.com/DANpcg"><i class="fa fa-youtube"></i>DANpcg</a></li>
+			<li><a href="http://twitch.tv/DANpcg"><i class="fa fa-twitch"></i>DANpcg</a></li>
+		</ul>
+		<ul class="colophon list-inline">
+			<li>DANgaming Tools</li>
+			<li class="text-muted">Code licensed under <a href="https://opensource.org/licenses/GPL-3.0" target="_blank">GNU General Public License v3.0</a></li>
+			<li class="text-muted">Documentation licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a></li>
+		</ul>
+	</footer>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" integrity="sha256-obZACiHd7gkOk9iIL/pimWMTJ4W/pBsKu+oZnSeBIek=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js" integrity="sha256-0atoj6xVOJUoBM8Vp5PFywwLLE+aNl2svi4Q9UWZ+dQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js" integrity="sha256-rMOSOM5HDzVEMoVZTv2189+RKSTSgY5ZKfTfap7q2zE=" crossorigin="anonymous"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

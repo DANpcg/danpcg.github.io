@@ -1,0 +1,42 @@
+body {
+	padding-top: 50px;
+	padding-bottom: 20px;
+}
+.socialmedia li {
+	margin-right: 10px;
+}
+.socialmedia a {
+	color: inherit;
+}
+.socialmedia .fa {
+	margin-right: 4px;
+	font-size: 20px;
+	vertical-align: middle;
+}
+.fa-twitter {
+	color: #1da1f2;
+}
+.fa-youtube {
+	color: #cc181e;
+}
+.fa-twitch {
+	color: #6441a5;
+}
+
+/* Alienware Bot */
+.chat {
+	margin-bottom: 10px;
+	padding: 5px 10px;
+	font-size: 14px;
+}
+
+/* TwitchCheck */
+.twitchcheck-account {
+	display: inline-block;
+	font-size: 30px;
+	line-height: 50px;
+}
+.twitchcheck-logo {
+	margin-right: 10px;
+	width: 50px;
+}
