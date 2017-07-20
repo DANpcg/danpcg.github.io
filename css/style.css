@@ -30,13 +30,15 @@ body {
 	font-size: 14px;
 }
 
-/* TwitchCheck */
-.twitchcheck-account {
+/* TwitchCheck Lite */
+.twitchchecklite-account {
 	display: inline-block;
 	font-size: 30px;
 	line-height: 50px;
 }
-.twitchcheck-logo {
+.twitchchecklite-logo {
 	margin-right: 10px;
 	width: 50px;
 }
+
+/* TwitchCheck */

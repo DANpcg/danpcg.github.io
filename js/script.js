@@ -1,5 +1,6 @@
 var tplhb = {},
-	router;
+	router,
+	twitchcheckSuspiciousonlyWarning = false;
 
 $(function() {
 	initTemplates();
@@ -11,47 +12,112 @@ function initTemplates() {
 	$('script[type="text/template"]').each(function() {
 		tplhb[$(this).attr('id').replace(/^tpl-/, '')] = Handlebars.compile($(this).html());
 	});
+	Handlebars.registerHelper('_formatDate', function(date) {
+		return date.toLocaleString();
+	});
 }
 
 function initEvents() {
-	$('#form-twitchcheck').submit(function(e) {
+	$('#form-twitchchecklite').submit(function(e) {
 		e.preventDefault();
-		var name = $('#twitchcheck-name').val(),
-			follows = $('#twitchcheck-follows').val(),
-			compare = $('#twitchcheck-compare').val();
+		var name = $('#twitchchecklite-name').val(),
+			follows = $('#twitchchecklite-follows').val(),
+			compare = $('#twitchchecklite-compare').val();
 		
-		$('#twitchcheck-check').button('loading');
-		$('div[id^="twitchcheck-info-"]').html('');
+		$('#twitchchecklite-check').button('loading');
+		$('div[id^="twitchchecklite-info-"]').html('');
 		checkAccount(name, follows)
 			.then(function() {
-				$('#twitchcheck-hr').removeClass('hidden');
+				$('#twitchchecklite-hr').removeClass('hidden');
 			})
 			.always(function() {
-				$('#twitchcheck-check').button('reset');
+				$('#twitchchecklite-check').button('reset');
 			});
 		if(compare.length) {
 			checkAccount(compare, follows, true);
 		}
-		router.navigate('twitchcheck/' + name + (follows.length ? '/' + follows : '') + (compare.length ? (follows.length ? '' : '/-') + '/' + compare : ''));
+		router.navigate('twitchchecklite/' + name + (follows.length ? '/' + follows : '') + (compare.length ? (follows.length ? '' : '/-') + '/' + compare : ''));
+	});
+	
+	$('#form-twitchcheck').submit(function(e) {
+		e.preventDefault();
+		var file = $('#twitchcheck-csv').get(0).files[0],
+			fr;
+		
+		if(file) {
+			fr = new FileReader();
+			fr.onload = function() {
+				var arr = _.initial(fr.result.split('\n')),
+					header,
+					followers = [],
+					red = 10 * 60000,
+					yellow = 60 * 60000,
+					threshold = new Date('2015-05-21T00:00:00Z');
+				if(arr[0] === '"Channel", "Follow Date", "Notfications", "User Created", "User Updated"') {
+					_.each(arr, function(line, i) {
+						var larr = line.replace(/^"(.+)"$/, '$1').split('", "');
+						if(i < 1) {
+							header = {
+								name: larr[0],
+								follow: larr[1],
+								notify: larr[2],
+								created: larr[3],
+								updated: larr[4]
+							};
+						} else {
+							var follower = {
+									name: larr[0],
+									follow: new Date(larr[1]),
+									notify: larr[2] === 'Yes',
+									created: new Date(larr[3]),
+									updated: new Date(larr[4])
+								},
+								diff = follower.follow - follower.created;
+							
+							follower.suspicious = follower.follow > threshold ? (diff < red ? 'danger' : (diff < yellow ? 'warning' : false)) : false;
+							follower.suspicion = follower.suspicious ? '<i class="fa fa-clock-o"></i> ' + (diff > 60000 ? Math.floor(diff / 60000) : '<1') + 'm' : '';
+							
+							followers[i - 1] = follower;
+						}
+					});
+					
+					renderFollowers(header, followers);
+				} else {
+					window.alert('Please select a compatible csv file.');
+				}
+			};
+			fr.readAsText(file);
+		} else {
+			window.alert('Please select a csv file.');
+		}
+	});
+	$('#twitchcheck-suspiciousonly').on('change', function() {
+		var check = !$(this).prop('checked');
+		if(twitchcheckSuspiciousonlyWarning || window.confirm('The total number of followers is over 9000!\nThis operation might take a while. Continue?')) {
+			twitchcheckSuspiciousonlyWarning = true;
+			$('#twitchcheck-table tbody tr.ns').toggle(check);
+		} else {
+			$(this).prop('checked', check);
+		}
 	});
 }
 
 function initRouter() {
 	var Router = Backbone.Router.extend({
 		routes: {
-			'twitchcheck/:name(/:follows)(/:compare)': 'twitchCheck',
+			'twitchchecklite/:name(/:follows)(/:compare)': 'twitchCheckLite',
 			':tab': 'showTab'
 		},
 		
 		showTab: function(tab) {
 			$('#tab-' + tab).tab('show');
 		},
-		twitchCheck: function(name, follows, compare) {
-			$('#tab-twitchcheck').tab('show');
-			$('#twitchcheck-name').val(name);
-			$('#twitchcheck-follows').val(follows == '-' ? '' : follows);
-			$('#twitchcheck-compare').val(compare);
-			$('#form-twitchcheck').submit();
+		twitchCheckLite: function(name, follows, compare) {
+			$('#tab-twitchchecklite').tab('show');
+			$('#twitchchecklite-name').val(name);
+			$('#twitchchecklite-follows').val(follows == '-' ? '' : follows);
+			$('#twitchchecklite-compare').val(compare);
+			$('#form-twitchchecklite').submit();
 		}
 	});
 	
@@ -69,7 +135,7 @@ function checkAccount(name, follows, compare) {
 		success: function(resp) {
 			resp.created_at = new Date(resp.created_at).toLocaleString();
 			resp.updated_at = new Date(resp.updated_at).toLocaleString();
-			$('#twitchcheck-info-user' + (compare ? '2' : '')).html(tplhb.twitchcheckInfoUser(resp));
+			$('#twitchchecklite-info-user' + (compare ? '2' : '')).html(tplhb.twitchcheckliteInfoUser(resp));
 			if(follows.length && follows != '-') {
 				var data = {
 					name: resp.display_name,
@@ -84,7 +150,7 @@ function checkAccount(name, follows, compare) {
 						data.created_at = new Date(resp2.created_at).toLocaleString();
 					},
 					complete: function() {
-						$('#twitchcheck-info-follows' + (compare ? '2' : '')).html(tplhb.twitchcheckInfoFollows(data));
+						$('#twitchchecklite-info-follows' + (compare ? '2' : '')).html(tplhb.twitchcheckliteInfoFollows(data));
 					}
 				});
 			}
@@ -93,4 +159,17 @@ function checkAccount(name, follows, compare) {
 			alert(resp.responseJSON.message);
 		}
 	});
+}
+
+function renderFollowers(header, followers) {
+	var total = followers.length;
+	twitchcheckSuspiciousonlyWarning = total < 9001;
+	$('#twitchcheck-menu').removeClass('hidden');
+	$('#twitchcheck-suspiciousonly').prop('checked', false);
+	$('#twitchcheck-total').text(total);
+	$('#twitchcheck-suspicious').text(total - _.where(followers, {suspicious: false}).length);
+	$('#twitchcheck-table').html(tplhb.twitchcheckTable({
+		header: header,
+		followers: followers
+	}));
 }

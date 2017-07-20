@@ -26,6 +26,7 @@
 			<ul class="nav navbar-nav">
 				<li class="active"><a id="tab-home" href="#home">Home</a></li>
 				<li><a id="tab-awbot" href="#awbot">Alienware Bot</a></li>
+				<li><a id="tab-twitchchecklite" href="#twitchchecklite">TwitchCheck Lite</a></li>
 				<li><a id="tab-twitchcheck" href="#twitchcheck">TwitchCheck</a></li>
 				<li><a href="https://danpcg.github.io/TwitchTournament/">TwitchTournament</a></li>
 			</ul>
@@ -49,10 +50,17 @@
 					<p><a class="btn btn-default" href="#awbot">View details &raquo;</a></p>
 				</div>
 				<div class="col-md-4">
-					<h2>TwitchCheck</h2>
+					<h2>TwitchCheck Lite</h2>
 					<p>A tool that displays some basic information about Twitch accounts and allows to compare two accounts.</p>
+					<p><a class="btn btn-default" href="#twitchchecklite">View details &raquo;</a></p>
+				</div>
+				<div class="col-md-4">
+					<h2>TwitchCheck</h2>
+					<p>A tool that checks the followers of a Twitch channel for suspicious activity.</p>
 					<p><a class="btn btn-default" href="#twitchcheck">View details &raquo;</a></p>
 				</div>
+			</div>
+			<div class="row">
 				<div class="col-md-4">
 					<h2>TwitchTournament</h2>
 					<p>Tournament bracket generator for single elimination tournaments with Twitch integration.</p>
@@ -98,6 +106,44 @@
 		</div>
 	</div>
 	
+	<div id="twitchchecklite" class="tab-pane">
+		<div class="container">
+			<h1>TwitchCheck Lite</h1>
+			<blockquote>
+				<p>Data analytics complete. Yarp... Suspicious activity.</p>
+				<footer><a href="https://i.imgflip.com/14i8zp.jpg" target="_blank">Epicorg</a></footer>
+			</blockquote>
+			<form id="form-twitchchecklite">
+				<div class="row">
+					<div class="col-md-4 form-group">
+						<label for="twitchchecklite-name">Account</label>
+						<input id="twitchchecklite-name" class="form-control" required placeholder="Twitch name">
+					</div>
+					<div class="col-md-4 form-group">
+						<label for="twitchchecklite-follows">Follows channel (optional)</label>
+						<input id="twitchchecklite-follows" class="form-control" value="alienware" placeholder="Twitch channel">
+					</div>
+					<div class="col-md-4 form-group">
+						<label for="twitchchecklite-compare">Compare with (optional)</label>
+						<input id="twitchchecklite-compare" class="form-control" placeholder="Twitch name">
+					</div>
+				</div>
+				<button type="submit" id="twitchchecklite-check" class="btn btn-primary" data-loading-text="Loading&hellip;">Check</button>
+			</form>
+			<hr id="twitchchecklite-hr" class="hidden">
+			<div class="row">
+				<div class="col-md-6">
+					<div id="twitchchecklite-info-user"></div>
+					<div id="twitchchecklite-info-follows"></div>
+				</div>
+				<div class="col-md-6">
+					<div id="twitchchecklite-info-user2"></div>
+					<div id="twitchchecklite-info-follows2"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<div id="twitchcheck" class="tab-pane">
 		<div class="container">
 			<h1>TwitchCheck</h1>
@@ -108,38 +154,38 @@
 			<form id="form-twitchcheck">
 				<div class="row">
 					<div class="col-md-4 form-group">
-						<label for="twitchcheck-name">Account</label>
-						<input id="twitchcheck-name" class="form-control" required placeholder="Twitch name">
-					</div>
-					<div class="col-md-4 form-group">
-						<label for="twitchcheck-follows">Follows channel (optional)</label>
-						<input id="twitchcheck-follows" class="form-control" value="alienware" placeholder="Twitch channel">
-					</div>
-					<div class="col-md-4 form-group">
-						<label for="twitchcheck-compare">Compare with (optional)</label>
-						<input id="twitchcheck-compare" class="form-control" placeholder="Twitch name">
+						<label for="twitchcheck-csv">Followers CSV</label>
+						<input type="file" id="twitchcheck-csv" required accept=".csv">
 					</div>
 				</div>
-				<button type="submit" id="twitchcheck-check" class="btn btn-primary" data-loading-text="Loading&hellip;">Check</button>
+				<button type="submit" id="twitchcheck-check" class="btn btn-primary">Check</button>
 			</form>
-			<hr id="twitchcheck-hr" class="hidden">
-			<div class="row">
-				<div class="col-md-6">
-					<div id="twitchcheck-info-user"></div>
-					<div id="twitchcheck-info-follows"></div>
-				</div>
-				<div class="col-md-6">
-					<div id="twitchcheck-info-user2"></div>
-					<div id="twitchcheck-info-follows2"></div>
-				</div>
+			<div id="twitchcheck-menu" class="hidden">
+				<hr>
+				<ul class="list-inline">
+					<li class="checkbox">
+						<label><input type="checkbox" id="twitchcheck-suspiciousonly"> Show only suspicious channels</label>
+					</li>
+					<li>
+						Total followers: <span id="twitchcheck-total"></span>
+					</li>
+					<li>
+						Suspicious followers: <span id="twitchcheck-suspicious"></span>
+					</li>
+					<li>
+						<i class="fa fa-clock-o"></i> User Created and Follow Date difference
+					</li>
+				</ul>
+				<hr>
 			</div>
+			<div id="twitchcheck-table"></div>
 		</div>
 	</div>
 </div>
 
-<script id="tpl-twitchcheckInfoUser" type="text/template">
-	<p><a class="twitchcheck-account" href="https://www.twitch.tv/{{name}}/profile" target="_blank" title="Go to profile">
-		{{#if logo}}<img src="{{logo}}" class="twitchcheck-logo">{{/if}}{{display_name}}
+<script id="tpl-twitchcheckliteInfoUser" type="text/template">
+	<p><a class="twitchchecklite-account" href="https://www.twitch.tv/{{name}}/following" target="_blank" title="Go to profile">
+		{{#if logo}}<img src="{{logo}}" class="twitchchecklite-logo">{{/if}}{{display_name}}
 	</a></p>
 	<ul class="list-unstyled">
 		{{#if bio}}<li><b>Bio:</b> {{bio}}</li>{{/if}}</li>
@@ -147,12 +193,40 @@
 		<li><b>Last update:</b> {{updated_at}}</li>
 	</ul>
 </script>
-<script id="tpl-twitchcheckInfoFollows" type="text/template">
+<script id="tpl-twitchcheckliteInfoFollows" type="text/template">
 	{{#if created_at}}
 	<p><i class="fa fa-check"></i> {{name}} is following {{channel}} since {{created_at}}</p>
 	{{else}}
 	<p><i class="fa fa-times"></i> {{name}} is not following {{channel}}</p>
 	{{/if}}
+</script>
+<script id="tpl-twitchcheckTable" type="text/template">
+	<table class="twitchcheck-table table table-striped table-hover table-condensed">
+		<thead>
+			<tr>
+			{{#with header}}
+				<th>{{name}}</th>
+				<th>{{created}}</th>
+				<th>{{follow}}<span class="caret"></span></th>
+				<th>{{updated}}</th>
+				<th>{{notify}}</th>
+				<th>Suspicion</th>
+			{{/with}}
+			</tr>
+		</thead>
+		<tbody>
+		{{#each followers}}
+			<tr class="{{#if suspicious}}{{suspicious}}{{else}}ns{{/if}}">
+				<td><a href="https://www.twitch.tv/{{name}}/following" target="_blank">{{name}}</a></td>
+				<td>{{_formatDate created}}</td>
+				<td>{{_formatDate follow}}</td>
+				<td>{{_formatDate updated}}</td>
+				<td>{{#if notify}}<i class="fa fa-check"></i>{{else}}<i class="fa fa-times"></i>{{/if}}</td>
+				<td>{{{suspicion}}}</td>
+			</tr>
+		{{/each}}
+		</tbody>
+	</table>
 </script>
 
 <div class="container">
