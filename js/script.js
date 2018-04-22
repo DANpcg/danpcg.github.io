@@ -20,9 +20,9 @@ function initTemplates() {
 function initEvents() {
 	$('#form-twitchchecklite').submit(function(e) {
 		e.preventDefault();
-		var name = $('#twitchchecklite-name').val(),
-			follows = $('#twitchchecklite-follows').val(),
-			compare = $('#twitchchecklite-compare').val();
+		var name = $('#twitchchecklite-name').val().trim(),
+			follows = $('#twitchchecklite-follows').val().trim(),
+			compare = $('#twitchchecklite-compare').val().trim();
 		
 		$('#twitchchecklite-check').button('loading');
 		$('div[id^="twitchchecklite-info-"]').html('');
